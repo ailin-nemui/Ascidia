@@ -1,8 +1,9 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 import patterns
 from main import *
 
+import argparse
 
 class FileOutContext(object):
 

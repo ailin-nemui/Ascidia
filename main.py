@@ -68,14 +68,14 @@ TODO:
 """
 
 import sys
-import argparse
-import xml.dom
-import xml.dom.minidom
+#import argparse
+#import xml.dom
+#import xml.dom.minidom
 import math
-import re
-import cairo
-from collections import defaultdict
-from collections import namedtuple
+#import re
+#import cairo
+#from collections import defaultdict
+#from collections import namedtuple
 
 import core
 import patterns
@@ -252,7 +252,53 @@ class PngOutput(object):
     def _y(self,y):
         return int(y * self.prefs.charheight)
 
+
+class myElement:
+    def __init__(self,name):
+        self._name = name
+        self._attrs = {}
+        self._chld = []
+
+    def setAttribute(self,name,value):
+        self._attrs[name] = value
+
+    def appendChild(self,el):
+        self._chld.append(el)
+
+    def writexml(self,stream,addindent,newl):
+        stream.write("<" + self._name);
+        for k,v in self._attrs.items():
+            stream.write(" " + k + "=\"" + v + "\"")
+        stream.write(">")
+        for e in self._chld:
+            e.writexml(stream,addindent,newl)
+        stream.write("</" + self._name + ">\n")
+
+class myTextNode:
+    def __init__(self,text):
+        self._text = text
+
+    def writexml(self,stream,addindent,newl):
+        stream.write(self._text)
         
+class myxml:
+    def __init__(self,x1,root,x3):
+        self._root = root
+        self._attrs = {}
+        self.documentElement = myElement(root)
+
+    def setAttribute(self,name,value):
+        self._attrs[name] = value
+
+    def createElement(self,name):
+        return myElement(name)
+
+    def createTextNode(self,text):
+        return myTextNode(text)
+
+    def writexml(self,stream,addindent,newl):
+        self.documentElement.writexml(stream,addindent=addindent,newl=newl)
+    
 class SvgOutput(object):
 
     EXTS = ("svg","xml")
@@ -276,7 +322,7 @@ class SvgOutput(object):
         self.prefs = prefs
             
     def _output(self):
-        self.doc = xml.dom.minidom.getDOMImplementation().createDocument(None,"svg",None)
+        self.doc = myxml(None,"svg",None)
         root = self.doc.documentElement
         root.setAttribute("xmlns","http://www.w3.org/2000/svg")
         root.setAttribute("version","1.1")
@@ -401,6 +447,34 @@ class SvgOutput(object):
             el.setAttribute("fill-opacity",self._alpha(item.falpha))
         
     
+class defaultdict_dict:
+    def __init__(self):
+        self._dict = {}
+
+    def __getitem__(self, key):
+        if key in self._dict:
+            return self._dict[key]
+        else:
+            newval = self._dict[key] = {}
+            return newval
+
+    def __delitem__(self, key):
+        del(self._dict[key])
+
+class defaultdict_list:
+    def __init__(self):
+        self._dict = {}
+
+    def __getitem__(self, key):
+        if key in self._dict:
+            return self._dict[key]
+        else:
+            newval = self._dict[key] = []
+            return newval
+
+    def __delitem__(self, key):
+        del(self._dict[key])
+
 class MatchLookup(object):
 
     _matches = None
@@ -409,8 +483,8 @@ class MatchLookup(object):
     
     def __init__(self):
         self._matches = []
-        self._occupants = defaultdict(list)
-        self._match_meta = defaultdict(dict)
+        self._occupants = defaultdict_list()
+        self._match_meta = defaultdict_dict()
 
     def get_all_matches(self):
         return list(self._matches)
@@ -447,9 +521,19 @@ class MatchLookup(object):
                     self.remove_match(m)
         
         
-CurrentChar = namedtuple("CurrentChar","row col char meta")
+#CurrentChar = namedtuple("CurrentChar","row col char meta")
+class CurrentChar:
+    def __init__(self,row,col,char,meta):
+        self.row = row
+        self.col = col
+        self.char = char
+        self.meta = meta
 
-Diagram = namedtuple("Diagram","size content")
+#Diagram = namedtuple("Diagram","size content")
+class Diagram:
+    def __init__(self,size,content):
+        self.size = size
+        self.content = content
 
 
 def process_diagram(text,patternlist,proglsnr=lambda x: None):

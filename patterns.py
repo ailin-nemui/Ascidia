@@ -871,7 +871,7 @@ class LongUpDiagLinePattern(LongLinePattern):
     xdir = -1
     ydir = 1
     startchars = ["/"]
-    midchars = startchars
+    midchars = ["/"]
     startmeta = M_LINE_START_SW
     endmeta = M_LINE_AFTER_SW
     stroketype = STROKE_SOLID
@@ -896,7 +896,7 @@ class LongUpDiagDashedLinePattern(LongLinePattern):
     xdir = -1
     ydir = 1
     startchars = [","]
-    midchars = startchars
+    midchars = [","]
     startmeta = M_LINE_START_SW | M_DASH_START_SW
     endmeta = M_LINE_AFTER_SW | M_DASH_AFTER_SW
     stroketype = STROKE_DASHED
@@ -921,7 +921,7 @@ class LongDownDiagLinePattern(LongLinePattern):
     xdir = 1
     ydir = 1
     startchars = ["\\"]
-    midchars = startchars
+    midchars = ["\\"]
     startmeta = M_LINE_START_SE
     endmeta = M_LINE_AFTER_SE
     stroketype = STROKE_SOLID
@@ -946,7 +946,7 @@ class LongDownDiagDashedLinePattern(LongLinePattern):
     xdir = 1
     ydir = 1
     startchars = ["`"]
-    midchars = startchars
+    midchars = ["`"]
     startmeta = M_LINE_START_SE | M_DASH_START_SE
     endmeta = M_LINE_AFTER_SE | M_DASH_AFTER_SE
     stroketype = STROKE_DASHED
@@ -971,7 +971,7 @@ class LongVertLinePattern(LongLinePattern):
     xdir = 0
     ydir = 1
     startchars = ["|"]
-    midchars = startchars
+    midchars = ["|"]
     startmeta = M_LINE_START_S
     endmeta = M_LINE_AFTER_S
     stroketype = STROKE_SOLID
@@ -996,7 +996,7 @@ class LongVertDashedLinePattern(LongLinePattern):
     xdir = 0
     ydir = 1
     startchars = [";"]
-    midchars = startchars
+    midchars = [";"]
     startmeta = M_LINE_START_S | M_DASH_START_S
     endmeta = M_LINE_AFTER_S | M_DASH_AFTER_S
     stroketype = STROKE_DASHED
@@ -1009,7 +1009,7 @@ class LongHorizLinePattern(LongLinePattern):
     xdir = 1
     ydir = 0
     startchars = ["-"]
-    midchars = startchars
+    midchars = ["-"]
     startmeta = M_LINE_START_E
     endmeta = M_LINE_AFTER_E
     stroketype = STROKE_SOLID

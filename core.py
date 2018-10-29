@@ -28,24 +28,114 @@ Main import stuff
 """
 
 #import mrf.ascii
-from collections import namedtuple
+#from collections import namedtuple
 
 
 CHAR_H_RATIO = 2.0
 
-Line = namedtuple("Line","a b z stroke salpha w stype")
-Rectangle = namedtuple("Rectangle","a b z stroke salpha w stype fill falpha")
-Ellipse = namedtuple("Ellipse", "a b z stroke salpha w stype fill falpha")
-Arc = namedtuple("Arc","a b z start end stroke salpha w stype fill falpha")
-Text = namedtuple("Text","pos z text colour alpha size")
-QuadCurve = namedtuple("QuadCurve","a b c z stroke salpha w stype")
-Polygon = namedtuple("Polygon","points z stroke salpha w stype fill falpha")
+#Line = namedtuple("Line","a b z stroke salpha w stype")
+class Line:
+    def __init__(self,a,b,z,stroke,salpha,w,stype):
+        self.a=a
+        self.b=b
+        self.z=z
+        self.stroke=stroke
+        self.salpha=salpha
+        self.w=w
+        self.stype=stype
 
-STROKE_SOLID = object()
-STROKE_DASHED = object()
+#Rectangle = namedtuple("Rectangle","a b z stroke salpha w stype fill falpha")
+class Rectangle:
+    def __init__(self,a,b,z,stroke,salpha,w,stype,fill,falpha):
+        self.a=a
+        self.b=b
+        self.z=z
+        self.stroke=stroke
+        self.salpha=salpha
+        self.w=w
+        self.stype=stype
+        self.fill=fill
+        self.falpha=falpha
 
-C_FOREGROUND = object()
-C_BACKGROUND = object()
+#Ellipse = namedtuple("Ellipse", "a b z stroke salpha w stype fill falpha")
+class Ellipse:
+    def __init__(self,a,b,z,stroke,salpha,w,stype,fill,falpha):
+        self.a=a
+        self.b=b
+        self.z=z
+        self.stroke=stroke
+        self.salpha=salpha
+        self.w=w
+        self.stype=stype
+        self.fill=fill
+        self.falpha=falpha
+
+#Arc = namedtuple("Arc","a b z start end stroke salpha w stype fill falpha")
+class Arc:
+    def __init__(self,a,b,z,start,end,stroke,salpha,w,stype,fill,falpha):
+        self.a=a
+        self.b=b
+        self.z=z
+        self.start=start
+        self.end=end
+        self.stroke=stroke
+        self.salpha=salpha
+        self.w=w
+        self.stype=stype
+        self.fill=fill
+        self.falpha=falpha
+
+#Text = namedtuple("Text","pos z text colour alpha size")
+class Text:
+    def __init__(self,pos,z,text,colour,alpha,size):
+        self.pos=pos
+        self.z=z
+        self.text=text
+        self.colour=colour
+        self.alpha=alpha
+        self.size=size
+
+#QuadCurve = namedtuple("QuadCurve","a b c z stroke salpha w stype")
+class QuadCurve:
+    def __init__(self,a,b,c,z,stroke,salpha,w,stype):
+        self.a=a
+        self.b=b
+        self.c=c
+        self.z=z
+        self.stroke=stroke
+        self.salpha=salpha
+        self.w=w
+        self.stype=stype
+
+#Polygon = namedtuple("Polygon","points z stroke salpha w stype fill falpha")
+class Polygon:
+    def __init__(self,points,z,stroke,salpha,w,stype,fill,falpha):
+        self.points=points
+        self.z=z
+        self.stroke=stroke
+        self.salpha=salpha
+        self.w=w
+        self.stype=stype
+        self.fill=fill
+        self.falpha=falpha
+
+class clStrokeSolid:
+    pass
+
+class clStrokeDashed:
+    pass
+
+class clCForeground:
+    pass
+
+class clCBackground:
+    pass
+        
+STROKE_SOLID = clStrokeSolid()
+STROKE_DASHED = clStrokeDashed()
+
+C_FOREGROUND = clCForeground()
+C_BACKGROUND = clCBackground()
 
 M_NONE = 0
 M_OCCUPIED = (1<<0)
@@ -86,6 +176,7 @@ class PatternRejected(Exception): pass
 class PatternStateError(Exception): pass
 class NoSuchPosition(Exception): pass
 
+#__pragma__ ('gsend')
 
 class Pattern(object):
     """Pattern base class with utility methods"""
@@ -93,11 +184,12 @@ class Pattern(object):
     gen = None
     is_finished = False
     curr = None
+    id = "PatternX"
     
     def __init__(self):
         self.curr = None
         self.gen = self.matcher()
-        self.gen.next()
+        self.gen.__next__()
         #self.debug_canvas = mrf.ascii.Canvas()
         
     def matcher(self):
